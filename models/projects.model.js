@@ -11,6 +11,7 @@ const projectsSchema = mongoose.Schema(
       required: true,
     },
     link: { type: String, required: true },
+    sourceCode: { type: String },
     isActive: {
       type: Boolean,
       required: true,
