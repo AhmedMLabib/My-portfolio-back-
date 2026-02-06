@@ -1,6 +1,7 @@
-const projectsModel = require("../models/projects.model");
+const certificateModel = require("../models/certificate.model");
 const cloudinary = require("cloudinary").v2;
-exports.createProject = async (req, res) => {
+
+exports.createCertificate = async (req, res) => {
   try {
     imageURL = null;
     imagePublicId = null;
@@ -20,29 +21,29 @@ exports.createProject = async (req, res) => {
       imageURL = uploadImage.secure_url;
       imagePublicId = uploadImage.public_id;
     }
-    const project = await projectsModel.create({
+    const certificate = await certificateModel.create({
       ...req.body,
       image: imageURL,
       imagePublicId,
     });
-    res.status(201).json(project);
+    res.status(201).json(certificate);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-exports.getProjects = async (req, res) => {
+exports.getCertificates = async (req, res) => {
   try {
-    const projects = await projectsModel.find({});
-    res.status(201).json(projects);
+    const certificates = await certificateModel.find({});
+    res.status(201).json(certificates);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-exports.editProject = async (req, res) => {
+exports.editCertificate = async (req, res) => {
   try {
-    let existData = await projectsModel.findById(req.body._id);
+    let existData = await certificateModel.findById(req.body._id);
 
     if (existData) {
       if (req.file && existData.imagePublicId) {
@@ -68,14 +69,14 @@ exports.editProject = async (req, res) => {
       imagePublicId = uploadImage.public_id;
     }
 
-    const project = await projectsModel.findOneAndUpdate(
+    const certificate = await certificateModel.findOneAndUpdate(
       { _id: req.body._id },
       {
         $set: { ...req.body, image: imageURL, imagePublicId },
       },
       { new: true },
     );
-    res.status(201).json(project);
+    res.status(201).json(certificate);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -83,13 +84,13 @@ exports.editProject = async (req, res) => {
 
 exports.deleteById = async (req, res) => {
   try {
-    let existData = await projectsModel.findById(req.body._id);
+    let existData = await certificateModel.findById(req.body._id);
     if (existData) {
       if (existData.imagePublicId) {
         await cloudinary.uploader.destroy(existData.imagePublicId);
       }
     }
-    await projectsModel.deleteOne({ _id: req.body._id }).then((result) => {
+    await certificateModel.deleteOne({ _id: req.body._id }).then((result) => {
       res.status(202).json({ result });
     });
   } catch (err) {

@@ -11,6 +11,8 @@ const projectsRouter = require("./routes/projects.router");
 
 const loginRouter = require("./routes/login.router");
 
+const certificateRouter = require("./routes/certificate.router");
+
 const cors = require("cors");
 const app = express();
 app.use(cors());
@@ -32,6 +34,8 @@ app.use("/skills", skillsRouter);
 app.use("/projects", projectsRouter);
 
 app.use("/login", loginRouter);
+
+app.use("/certificate" , certificateRouter)
 
 app.listen(process.env.PORT, () => {
   console.log(`Server Run At Port ${process.env.PORT}`);
